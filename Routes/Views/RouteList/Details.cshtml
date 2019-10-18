@@ -1,0 +1,40 @@
+﻿@using Routes.Models;
+@model Tuple<Route, List<Place>>
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Route</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Item1.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.RouteUserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Item1.RouteUserId)
+        </dd>
+        <dt>
+            @foreach (var item in Model.Item2)
+            {
+                @if (item.RouteId == Model.Item1.Id)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.Lg)<br />
+                            @Html.DisplayFor(model => item.Lt)<br />
+                        </td>
+                    </tr>
+                }
+            }
+        </dt>
+</dl>
+</div>

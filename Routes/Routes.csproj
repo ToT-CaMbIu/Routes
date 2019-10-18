@@ -5,8 +5,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20191002094836_ThirdCreate.cs" />
+    <Compile Remove="Migrations\20191002094836_ThirdCreate.Designer.cs" />
+    <Compile Remove="Migrations\20191002095239_ThirdCreate.cs" />
+    <Compile Remove="Migrations\20191002095239_ThirdCreate.Designer.cs" />
+    <Compile Remove="Migrations\20191002095917_ThirdCreate.cs" />
+    <Compile Remove="Migrations\20191002095917_ThirdCreate.Designer.cs" />
+    <Compile Remove="Migrations\20191002100233_T4Create.cs" />
+    <Compile Remove="Migrations\20191002100233_T4Create.Designer.cs" />
+    <Compile Remove="Migrations\20191002103101_5Create.cs" />
+    <Compile Remove="Migrations\20191002103101_5Create.Designer.cs" />
+    <Compile Remove="Migrations\20191002103527_3Create.cs" />
+    <Compile Remove="Migrations\20191002103527_3Create.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
   </ItemGroup>
 
 </Project>

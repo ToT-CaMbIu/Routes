@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Routes.Models;
 
 namespace Routes.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly RouteContext _context;
@@ -53,7 +55,7 @@ namespace Routes.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nickname,Country,Rating,InfoAbout,isPremium,Id,Role")] User user)
+        public async Task<IActionResult> Create([Bind("UserName,Country,Rating,InfoAbout,isPremium,Id")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +87,7 @@ namespace Routes.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Nickname,Country,Rating,InfoAbout,isPremium,Id,Role")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserName,Email,Country,Rating,InfoAbout,isPremium,Id")] User user)
         {
             if (id != user.Id)
             {

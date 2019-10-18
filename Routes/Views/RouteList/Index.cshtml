@@ -1,0 +1,12 @@
+﻿<h2>Routes</h2>
+<table class="table">
+    @foreach (var route in Model)
+    {
+    <tr>
+        <td>
+            <a asp-action="Details" asp-route-id="@route.Id">@route.Name</a> |
+            <a asp-action="Delete" asp-route-id="@route.Id" method="post">Delete</a>
+        </td>
+    </tr>
+    }
+</table>

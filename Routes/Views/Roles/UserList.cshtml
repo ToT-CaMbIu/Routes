@@ -1,0 +1,12 @@
+﻿<h2>User List</h2>
+<table class="table">
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>
+                <a class="btn btn-default" asp-action="Edit" asp-route-userid="@user.Id">Rewrite Roles</a>
+            </td>
+        </tr>
+    }
+</table>
