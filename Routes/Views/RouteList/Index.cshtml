@@ -4,8 +4,14 @@
     {
     <tr>
         <td>
-            <a asp-action="Details" asp-route-id="@route.Id">@route.Name</a> |
-            <a asp-action="Delete" asp-route-id="@route.Id" method="post">Delete</a>
+            <h1>
+                <a asp-action="Details" asp-route-id="@route.Id">@route.Name</a>
+                @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Moderator"))
+                {
+                    <h> | </h>
+                    <a asp-action="Delete" asp-route-id="@route.Id" method="post">Delete</a>
+                }
+            </h1>
         </td>
     </tr>
     }

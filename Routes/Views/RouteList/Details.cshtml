@@ -1,5 +1,6 @@
 ﻿@using Routes.Models;
-@model Tuple<Route, List<Place>>
+@using Newtonsoft.Json;
+@model Tuple<Route, List<List<string>>>
 @{
     ViewData["Title"] = "Details";
 }
@@ -22,19 +23,45 @@
         <dd>
             @Html.DisplayFor(model => model.Item1.RouteUserId)
         </dd>
-        <dt>
-            @foreach (var item in Model.Item2)
-            {
-                @if (item.RouteId == Model.Item1.Id)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(model => item.Lg)<br />
-                            @Html.DisplayFor(model => item.Lt)<br />
-                        </td>
-                    </tr>
-                }
-            }
-        </dt>
-</dl>
+    </dl>
 </div>
+
+
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Google Maps Multiple Markers</title>
+    <script src="https://maps.googleapis.com/maps/api/js?"></script>
+</head>
+<body>
+    <div id="map" style="width: 500px; height: 400px;"></div>
+
+    <script type="text/javascript">
+        var locations = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Item2))')
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: new google.maps.LatLng(parseFloat(locations[0][0]), parseFloat(locations[0][1])),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < locations.length; i++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(parseFloat(locations[i][0]), parseFloat(locations[i][1])),
+                map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                return function () {
+                    infowindow.setContent(locations[i][2]);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+        }
+    </script>
+</body>
+</html>

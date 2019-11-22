@@ -1,0 +1,68 @@
+﻿@model Routes.Models.PlacesViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>KeK</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <input class="btn btn-default" id="AddButton" type="button" value="Add" />
+            </div>
+            <div id="TextBoxContainer">
+
+            </div>
+            <div class="row">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+@section scripts
+    {
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        var i = 0;
+        $(document).ready(function () {
+            $("#AddButton").click(function () {
+                var div = $("<div />");
+                div.addClass("row");
+                var value = "";
+
+                var lgBox = $("<input />").attr("type", "textbox").attr("name", "Places[" + i + "].Lg");
+                lgBox.addClass("col-md-4");
+                var ltBox = $("<input />").attr("type", "textbox").attr("name", "Places[" + i + "].Lt");
+                ltBox.addClass("col-md-4");
+                var infoBox = $("<input />").attr("type", "textbox").attr("name", "Places[" + i + "].Info");
+                infoBox.addClass("col-md-4");
+
+                lgBox.val(value);
+                ltBox.val(value);
+                infoBox.val(value);
+                div.append(lgBox);
+                div.append(ltBox);
+                div.append(infoBox);
+                var button = $("<input />").attr("type", "button").attr("value", "Remove");
+                button.attr("onclick", "RemoveTextBox(this)");
+                button.addClass("btn btn-default")
+                div.append(button);
+                $("#TextBoxContainer").append(div);
+                i++;
+            });
+        });
+        function RemoveTextBox(button) {
+            $(button).parent().remove();
+            i--;
+        }
+    </script>
+}
