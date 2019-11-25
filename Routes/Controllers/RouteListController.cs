@@ -24,7 +24,7 @@ namespace Routes.Controllers
         UserManager<User> _userManager;
         RouteContext _context;
         public RouteListController(UserManager<User> userManager, RouteContext context)
-        {
+        { 
             _userManager = userManager;
             _context = context;
         }

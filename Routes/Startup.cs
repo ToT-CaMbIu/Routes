@@ -76,6 +76,10 @@ namespace Routes
                 endpoints.MapHub<ChatHub>("/chatHub");
             });*/
 
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
 
             app.UseMvc(routes =>
             {
