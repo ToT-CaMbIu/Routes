@@ -1,27 +1,29 @@
 ﻿@using Routes.Models;
 @using Newtonsoft.Json;
-@model Tuple<Route, List<List<string>>>
+@model Tuple<Tuple<Route, List<Comment>>, List<List<string>>>
 @{
     ViewData["Title"] = "Details";
 }
 
 <h2>Details</h2>
 
+<input hidden value="@Model.Item1.Item1.Id" name="id" id="id">
+
 <div>
     <h4>Route</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Item1.Name)
+            @Html.DisplayNameFor(model => model.Item1.Item1.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Item1.Name)
+            @Html.DisplayFor(model => model.Item1.Item1.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Item1.RouteUserId)
+            @Html.DisplayNameFor(model => model.Item1.Item1.UserName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Item1.RouteUserId)
+            @Html.DisplayFor(model => model.Item1.Item1.UserName)
         </dd>
     </dl>
 </div>
@@ -40,7 +42,7 @@
         var locations = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Item2))')
 
         var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 10,
+            zoom: 4,
             center: new google.maps.LatLng(parseFloat(locations[0][0]), parseFloat(locations[0][1])),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
@@ -65,3 +67,35 @@
     </script>
 </body>
 </html>
+
+
+<form asp-action="Details" method="post">
+    <p><h5>Enter your opinion</h5></p>
+    <p><textarea style="width: 500px; height: 100px;" name="NewComment" id="NewComment"></textarea></p>
+    <div class="form-group">
+        <input type="submit" value="Leave a commentary" class="btn btn-default" id="sendButton" />
+    </div>
+</form>
+
+<div>
+    <h4>Comments</h4>
+    <hr />
+    @foreach (var commentary in Model.Item1.Item2)
+    {
+        <div id="commentdiv">
+            <div class="card text">
+                <div class="card-header">
+                    <b>@commentary.UserName</b>
+                </div>
+                <div class="card-body">
+                    <a>@commentary.Content</a>
+                </div>
+                @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Moderator"))
+                {
+                    <a asp-action="DeleteComment" asp-route-id="@commentary.Id" method="post">Delete</a>
+                }
+            </div>
+            <hr />
+        </div>
+    }
+</div>

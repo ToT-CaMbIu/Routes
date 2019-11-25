@@ -6,11 +6,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Routes.Models;
+using Routes.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace Routes.Controllers
 {
+    public class PagedData<T> where T : class
+    {
+        public IEnumerable<T> Data { get; set; }
+        public int NumberOfPages { get; set; }
+        public int CurrentPage { get; set; }
+    }
+
     public class RouteListController : Controller
     {
         UserManager<User> _userManager;
@@ -21,7 +29,7 @@ namespace Routes.Controllers
             _context = context;
         }
 
-        public IActionResult Index() => View(_context.Routes.ToList());
+        //public IActionResult Index() => View(_context.Routes.ToList());
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
@@ -61,6 +69,36 @@ namespace Routes.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Moderator")]
+        public async Task<IActionResult> DeleteComment(int? id)
+        {
+            if (id == null)
+                return NotFound();
+            var comment = await _context.Comments
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            return View(comment);
+        }
+
+        [HttpPost, ActionName("DeleteComment")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteCommentConfirmed(int? id)
+        {
+            Comment comment = await _context.Comments.FindAsync(id);
+            if (comment != null)
+            {
+                var result = _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return NotFound();
+        }
+
         public ActionResult Create()
         {
             return View();
@@ -76,6 +114,7 @@ namespace Routes.Controllers
                 {
                     Name = route.Name,
                     isForPremium = false,
+                    UserName = user.UserName,
                     CountOfViews = 0,
                     RouteUserId = user.Id,
                 };
@@ -83,7 +122,8 @@ namespace Routes.Controllers
                 int id = tmp_route.Id;
                 for (int i = 0; i < route.Places.Count(); i++)
                 {
-                    if(route.Places[i].Lt == -360.0)
+                    if(route.Places[i].Lg < -180.0 || route.Places[i].Lg > 180.0 
+                        || route.Places[i].Lt < -90.0 || route.Places[i].Lg > 90.0)
                         return NotFound();
                     Place tmp_place = new Place
                     {
@@ -97,7 +137,7 @@ namespace Routes.Controllers
 
                 await _context.SaveChangesAsync();
 
-                List<Route> currentUser = await _context.Routes.Include(host => host.Places).ToListAsync();
+                List<Route> currentUser = await _context.Routes.Include(host => host.Places).ToListAsync(); //TODO add signalr
 
                 return Ok(currentUser);
             }
@@ -118,6 +158,10 @@ namespace Routes.Controllers
             {
                 return NotFound();
             }
+            var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == route.RouteUserId);
+            user.Rating++;
+            await _context.SaveChangesAsync();
             List<List<string>> strPlaces = new List<List<string>>();
             foreach (var item in places)
             {
@@ -130,8 +174,58 @@ namespace Routes.Controllers
                     strPlaces.Add(tmp);
                 }
             }
-            var tuple = new Tuple<Route, List<List<string>>>(route, strPlaces);
+            List<Comment> comments = new List<Comment>();
+            foreach (var item in _context.Comments.ToList())
+            {
+                if (item.RouteId == route.Id)
+                    comments.Add(item);
+            }
+            var tuple_comments_and_comments = new Tuple<Route, List<Comment>>(route, comments);
+            var tuple = new Tuple<Tuple<Route, List<Comment>>, List<List<string>>>(tuple_comments_and_comments, strPlaces);
             return View(tuple);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Details(int id, string NewComment)
+        {
+            User user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                Comment tmp_comment = new Comment
+                {
+                    RouteId = id,
+                    CommentUserId = user.Id,
+                    Content = NewComment,
+                    UserName = user.UserName,
+                };
+                _context.Comments.Add(tmp_comment);
+                await _context.SaveChangesAsync();
+                return LocalRedirect("~/RouteList/Details/" + id.ToString());
+            }
+            return NotFound();
+        }
+
+        public const int PageSize = 5;
+
+        public ActionResult Index()
+        {
+            var routes = new PagedData<Route>();
+
+            routes.Data = _context.Routes.Skip(PageSize * 0).Take(PageSize).ToList();
+            routes.NumberOfPages = Convert.ToInt32(Math.Ceiling((double)_context.Routes.Count() / PageSize));
+
+            return View(routes);
+        }
+
+        public ActionResult RouteListAjax(int page)
+        {
+            var routes = new PagedData<Route>();
+
+            routes.Data = _context.Routes.Skip(PageSize * (page - 1)).Take(PageSize).ToList();
+            routes.NumberOfPages = Convert.ToInt32(Math.Ceiling((double)_context.Routes.Count() / PageSize));
+            routes.CurrentPage = page;
+
+            return PartialView(routes);
         }
     }
 }

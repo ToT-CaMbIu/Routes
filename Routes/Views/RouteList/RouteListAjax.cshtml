@@ -1,0 +1,38 @@
+﻿@model Routes.Controllers.PagedData<Routes.Models.Route>
+
+<h2>Routes</h2>
+
+<table class="table" id="body">
+    <tbody>
+        @foreach (var route in Model.Data)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@route.Id">@route.Name</a>
+                    @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Moderator"))
+                    {
+                        <h> | </h>
+                        <a asp-action="Delete" asp-route-id="@route.Id" method="post">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">
+                @for (int i = 1; i <= Model.NumberOfPages; i++)
+                {
+                    if (i == Model.CurrentPage)
+                    {
+                        @i
+                    }
+                    else
+                    {
+                        <a class="page-number" href="#">@i</a>
+                    }
+                }
+            </td>
+        </tr>
+    </tfoot>
+</table>

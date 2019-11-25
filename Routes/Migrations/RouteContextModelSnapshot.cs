@@ -114,6 +114,8 @@ namespace Routes.Migrations
 
                     b.Property<int>("RouteId");
 
+                    b.Property<string>("UserName");
+
                     b.Property<int?>("СommentUserId");
 
                     b.HasKey("Id");
@@ -138,8 +140,6 @@ namespace Routes.Migrations
                     b.Property<double>("Lt");
 
                     b.Property<int>("RouteId");
-
-                    b.Property<double>("test");
 
                     b.HasKey("Id");
 
@@ -184,6 +184,8 @@ namespace Routes.Migrations
                     b.Property<string>("Name");
 
                     b.Property<int>("RouteUserId");
+
+                    b.Property<string>("UserName");
 
                     b.Property<bool>("isForPremium");
 
@@ -232,7 +234,7 @@ namespace Routes.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<double>("Rating");
+                    b.Property<int>("Rating");
 
                     b.Property<string>("SecurityStamp");
 

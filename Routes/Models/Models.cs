@@ -38,7 +38,7 @@ namespace Routes.Models
     {
         public string Nickname { get; set; }
         public string Country { get; set; }
-        public double Rating { get; set; }
+        public int Rating { get; set; }
         public string InfoAbout { get; set; }
         public bool isPremium { get; set; }
 
@@ -72,6 +72,8 @@ namespace Routes.Models
         public User RouteCreator { get; set; }
         public int RouteUserId { get; set; }
 
+        public string UserName { get; set; }
+
         public List<Place> Places { get; set; }
         public List<Comment> Comments { get; set; }
     }
@@ -84,6 +86,8 @@ namespace Routes.Models
         [ForeignKey("СommentUserId")]
         public User CommentCreator { get; set; }
         public int CommentUserId { get; set; }
+
+        public string UserName { get; set; }
 
         [ForeignKey("RouteId")]
         public int RouteId { get; set; }

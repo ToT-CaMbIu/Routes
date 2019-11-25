@@ -1,18 +1,25 @@
-﻿<h2>Routes</h2>
-<table class="table">
-    @foreach (var route in Model)
-    {
-    <tr>
-        <td>
-            <h1>
-                <a asp-action="Details" asp-route-id="@route.Id">@route.Name</a>
-                @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Moderator"))
-                {
-                    <h> | </h>
-                    <a asp-action="Delete" asp-route-id="@route.Id" method="post">Delete</a>
+﻿<!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+
+@model Routes.Controllers.PagedData<Routes.Models.Route>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+    $().ready(function () {
+        $("body").on('click', '.page-number', function () {
+            var page = parseInt($(this).html());
+
+            $.ajax({
+                url: '@Url.Action("RouteListAjax")',
+                data: { "page": page },
+                success: function (data) {
+                    $("#routelist").html(data);
                 }
-            </h1>
-        </td>
-    </tr>
-    }
-</table>
+            });
+        });
+    });
+</script>
+
+<div id="routelist">
+    @Html.Partial("RouteListAjax")
+</div>

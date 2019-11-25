@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Routes.Models;
+using Routes.Hubs;
 using Microsoft.AspNetCore.Identity;
 
 namespace Routes
@@ -42,6 +44,8 @@ namespace Routes
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddSignalR();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -62,6 +66,16 @@ namespace Routes
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            //app.MapSignalR();
+
+            //app.UseSignalR(routes => { routes.MapHub<NotificationHub>("/notification"); });
+
+            /*app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/chatHub");
+            });*/
+
 
             app.UseMvc(routes =>
             {

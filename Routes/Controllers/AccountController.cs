@@ -42,7 +42,7 @@ namespace Routes.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return LocalRedirect("~/RouteList/");
                     }
                 }
                 else
@@ -56,7 +56,7 @@ namespace Routes.Controllers
         public async Task<IActionResult> LogOut()
         {
             await SignInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return LocalRedirect("~/RouteList/");
         }
 
         [HttpGet]
@@ -81,7 +81,7 @@ namespace Routes.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
+                    return LocalRedirect("~/RouteList/");
                 }
                 else
                 {
