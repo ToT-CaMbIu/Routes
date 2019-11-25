@@ -1,26 +1,28 @@
-﻿@using Routes.Models;
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using Routes.Models;
 @using Newtonsoft.Json;
 @model Tuple<Tuple<Route, List<Comment>>, List<List<string>>>
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Localizer["Details"]</h2>
 
 <input hidden value="@Model.Item1.Item1.Id" name="id" id="id">
 
 <div>
-    <h4>Route</h4>
+    <h4>@Localizer["Route"]</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Item1.Item1.Name)
+            @Localizer["Name"]
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Item1.Item1.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Item1.Item1.UserName)
+            @Localizer["UserName"]
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Item1.Item1.UserName)
@@ -70,15 +72,15 @@
 
 
 <form asp-action="Details" method="post">
-    <p><h5>Enter your opinion</h5></p>
+    <p><h5>@Localizer["Opinion"]</h5></p>
     <p><textarea style="width: 500px; height: 100px;" name="NewComment" id="NewComment"></textarea></p>
     <div class="form-group">
-        <input type="submit" value="Leave a commentary" class="btn btn-default" id="sendButton" />
+        <input type="submit" value=@Localizer["Leave"] class="btn btn-default" id="sendButton" />
     </div>
 </form>
 
 <div>
-    <h4>Comments</h4>
+    <h4>@Localizer["Comments"]</h4>
     <hr />
     @foreach (var commentary in Model.Item1.Item2)
     {
@@ -92,7 +94,7 @@
                 </div>
                 @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Moderator"))
                 {
-                    <a asp-action="DeleteComment" asp-route-id="@commentary.Id" method="post">Delete</a>
+                    <a asp-action="DeleteComment" asp-route-id="@commentary.Id" method="post">@Localizer["Delete"]</a>
                 }
             </div>
             <hr />

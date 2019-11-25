@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Routes.Models;
 using Routes.Hubs;
 using Microsoft.AspNetCore.Identity;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Routes
 {
@@ -45,6 +47,9 @@ namespace Routes
             });
 
             services.AddSignalR();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddMvc()
+                .AddViewLocalization();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -62,19 +67,22 @@ namespace Routes
                 app.UseHsts();
             }
 
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en"),
+                new CultureInfo("ru")
+            };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                //DefaultRequestCulture = new RequestCulture("en"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
-            //app.MapSignalR();
-
-            //app.UseSignalR(routes => { routes.MapHub<NotificationHub>("/notification"); });
-
-            /*app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-                endpoints.MapHub<ChatHub>("/chatHub");
-            });*/
 
             app.UseSignalR(routes =>
             {

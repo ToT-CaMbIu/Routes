@@ -1,11 +1,13 @@
-﻿<h2>User List</h2>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<h2>@Localizer["UserList"]</h2>
 <table class="table">
     @foreach (var user in Model)
     {
         <tr>
             <td>@user.UserName</td>
             <td>
-                <a class="btn btn-default" asp-action="Edit" asp-route-userid="@user.Id">Rewrite Roles</a>
+                <a class="btn btn-default" asp-action="Edit" asp-route-userid="@user.Id">@Localizer["Rewrite"]</a>
             </td>
         </tr>
     }

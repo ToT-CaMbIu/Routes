@@ -1,6 +1,8 @@
 ﻿@model Routes.Controllers.PagedData<Routes.Models.Route>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
-<h2>Routes</h2>
+<h2>@Localizer["Routes"]</h2>
 
 <table class="table" id="body">
     <tbody>
@@ -8,12 +10,14 @@
         {
             <tr>
                 <td>
-                    <a asp-action="Details" asp-route-id="@route.Id">@route.Name</a>
-                    @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Moderator"))
-                    {
-                        <h> | </h>
-                        <a asp-action="Delete" asp-route-id="@route.Id" method="post">Delete</a>
-                    }
+                    <h4>
+                        <a asp-action="Details" asp-route-id="@route.Id">@route.Name</a>
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Moderator"))
+                        {
+                            <h> | </h>
+                            <a asp-action="Delete" asp-route-id="@route.Id" method="post">@Localizer["Delete"]</a>
+                        }
+                    <h4>
                 </td>
             </tr>
         }
@@ -21,17 +25,19 @@
     <tfoot>
         <tr>
             <td colspan="3">
-                @for (int i = 1; i <= Model.NumberOfPages; i++)
-                {
-                    if (i == Model.CurrentPage)
+                <h4>
+                    @for (int i = 1; i <= Model.NumberOfPages; i++)
                     {
-                        @i
+                        if (i == Model.CurrentPage)
+                        {
+                            @i
+                        }
+                        else
+                        {
+                            <a class="page-number" href="#">@i</a>
+                        }
                     }
-                    else
-                    {
-                        <a class="page-number" href="#">@i</a>
-                    }
-                }
+                <h4>
             </td>
         </tr>
     </tfoot>

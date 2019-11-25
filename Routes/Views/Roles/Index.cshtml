@@ -1,4 +1,6 @@
-﻿<h2>Roles</h2>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<h2>@Localizer["Roles"]</h2>
 <table class="table">
     @foreach (var role in Model)
     {
@@ -14,4 +16,4 @@
         </tr>
     }
 </table>
-<a asp-action="Create">Add Role</a>
+<a asp-action="Create">@Localizer["AddRole"]</a>

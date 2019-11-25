@@ -1,4 +1,6 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 <div class="container">
     <div class="row">&nbsp;</div>
     <div class="row">
@@ -7,14 +9,14 @@
         {
             <div class="col-6">
                 <input hidden type="text" id="userInput" value="@User.Identity.Name" />
-                Message...<input type="text" id="messageInput" />
-                <input type="button" id="sendButton" value="Send Message" />
+                @Localizer["Message"]...<input type="text" id="messageInput" />
+                <input type="button" id="sendButton" value=@Localizer["Send"] />
             </div>
         }
         else
         {
             <div class="col-6">
-                <li><a>Sign In to write in this chat</a></li>
+                <li><a>@Localizer["Kek"]</a></li>
             </div>
         }
     </div>

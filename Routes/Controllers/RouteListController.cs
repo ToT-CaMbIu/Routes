@@ -30,7 +30,6 @@ namespace Routes.Controllers
         }
 
         //public IActionResult Index() => View(_context.Routes.ToList());
-
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         [HttpGet]
@@ -41,6 +40,7 @@ namespace Routes.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [Route("Delete/{id?}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -122,7 +122,7 @@ namespace Routes.Controllers
                 int id = tmp_route.Id;
                 for (int i = 0; i < route.Places.Count(); i++)
                 {
-                    if(route.Places[i].Lg < -180.0 || route.Places[i].Lg > 180.0 
+                    if (route.Places[i].Lg < -180.0 || route.Places[i].Lg > 180.0
                         || route.Places[i].Lt < -90.0 || route.Places[i].Lg > 90.0)
                         return NotFound();
                     Place tmp_place = new Place
@@ -137,13 +137,13 @@ namespace Routes.Controllers
 
                 await _context.SaveChangesAsync();
 
-                List<Route> currentUser = await _context.Routes.Include(host => host.Places).ToListAsync(); //TODO add signalr
-
-                return Ok(currentUser);
+                return LocalRedirect("~/RouteList/");
             }
             return NotFound();
         }
 
+        [Route("Details/{id?}")]
+        [Route("Kek/{id?}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

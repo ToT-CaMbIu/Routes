@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -30,25 +32,24 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="" asp-controller="RouteList" asp-action="Index">List of Routes</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Home"]</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">@Localizer["About"]</a></li>
+                    <li><a asp-area="" asp-controller="RouteList" asp-action="Index">@Localizer["ListOfRoutes"]</a></li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a asp-area="" asp-controller="RouteList" asp-action="Create">Create Route</a></li>
-                        <li><a>Hello,@User.Identity.Name</a></li>
+                        <li><a asp-area="" asp-controller="RouteList" asp-action="Create">@Localizer["CreateRoute"]</a></li>
+                        <li><a>@Localizer["Hello"],@User.Identity.Name</a></li>
                         <li>
-                            <a asp-area="" asp-controller="Account" asp-action="LogOut">Log out</a>
+                            <a asp-area="" asp-controller="Account" asp-action="LogOut">@Localizer["LogOut"]</a>
                         </li>
                     }
                     else
                     {
                         <li>
-                            <a asp-area="" asp-controller="Account" asp-action="Login">Sign in</a>
+                            <a asp-area="" asp-controller="Account" asp-action="Login">@Localizer["SignIn"]</a>
                         </li>
                         <li>
-                            <a asp-area="" asp-controller="Account" asp-action="Register">Sign up</a>
+                            <a asp-area="" asp-controller="Account" asp-action="Register">@Localizer["SignUp"]</a>
                         </li>
                     }
                 </ul>

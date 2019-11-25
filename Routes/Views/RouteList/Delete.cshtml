@@ -1,14 +1,16 @@
-﻿@model Routes.Models.Route
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Routes.Models.Route
 @{
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>@Localizer["Delete"]</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>@Localizer["Kek"]</h3>
 
 <form asp-action="Delete">
     <input type="hidden" asp-for="Id" />
-    <input type="submit" value="Delete" class="btn btn-default" /> |
-    <a asp-action="Index">Back to List</a>
+    <input type="submit" value=@Localizer["Delete"] class="btn btn-default" /> |
+    <a asp-action="Index">@Localizer["Back"]</a>
 </form>

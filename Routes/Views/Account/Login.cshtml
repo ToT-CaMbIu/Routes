@@ -1,32 +1,34 @@
 ﻿@model Routes.Models.LoginViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = "Enter";
 }
 
-<h2>Enter</h2>
+<h2>@Localizer["Enter"]</h2>
 <form method="post" asp-controller="Account" asp-action="Login"
       asp-route-returnUrl="@Model.ReturnUrl">
     <div class="row">
         <div class="col-md-4">
             <div asp-validation-summary="ModelOnly"></div>
             <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label><br />
+                <label asp-for="UserName" class="control-label">@Localizer["UserName"]</label><br />
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label><br />
+                <label asp-for="Password" class="control-label">@Localizer["Password"]</label><br />
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div>
-                <label asp-for="RememberMe"></label><br />
+                <label asp-for="RememberMe">@Localizer["SavePassword"]</label><br />
                 <input asp-for="RememberMe" />
             </div>
             <div class="form-group">
                 <br />
-                <input type="submit" value="Enter" class="btn btn-default" />
+                <input type="submit" value=@Localizer["Enter"] class="btn btn-default" />
             </div>
         </div>
     </div>

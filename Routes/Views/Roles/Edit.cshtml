@@ -1,7 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model Routes.Models.ChangeRoleViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
-<h2>Edit Role of @Model.UserName</h2>
+<h2>@Localizer["EditRole"] @Model.UserName</h2>
 
 <form asp-action="Edit" method="post">
     <input type="hidden" name="userId" value="@Model.UserId" />
@@ -12,5 +14,5 @@
                    @(Model.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />@role.Name <br />
             }
     </div>
-    <input type="submit" value="Add" class="btn btn-default" />
+    <input type="submit" value=@Localizer["Add"] class="btn btn-default" />
 </form>
